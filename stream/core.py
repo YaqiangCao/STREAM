@@ -2779,7 +2779,7 @@ def plot_visualization_2D(adata,method='umap',n_neighbors=50, nb_pct=None,perple
 
     if(plotly):
         for ann in color:
-            fig = px.scatter(df_plot_shuf, x='Dim'+str(comp1+1), y='Dim'+str(comp2+1),color=ann,
+            fig = px.scatter(df_plot_shuf, x='Dim'+str(1), y='Dim'+str(2),color=ann,
                                 opacity=alpha,width=500,height=500,
                                 color_continuous_scale=px.colors.sequential.Viridis,
                                 color_discrete_map=adata.uns[ann+'_color'] if ann+'_color' in adata.uns_keys() else {})
