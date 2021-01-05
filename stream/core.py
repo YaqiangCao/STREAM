@@ -1211,7 +1211,7 @@ def plot_dimension_reduction(adata,n_components = None,comp1=0,comp2=1,comp3=2,c
                              pad=1.08,w_pad=None,h_pad=None,
                              show_text=False,show_graph=False,
                              save_fig=False,fig_path=None,fig_name='dimension_reduction.pdf',
-                             plotly=False):    
+                             plotly=False,return_fig=False):
     """Plot the manifold where the graph is learned
     
     Parameters
@@ -1262,7 +1262,9 @@ def plot_dimension_reduction(adata,n_components = None,comp1=0,comp2=1,comp3=2,c
     fig_name: `str`, optional (default: 'dimension_reduction.pdf')
         if save_fig is True, specify figure name.
     plotly: `bool`, optional (default: False)
-        if True, plotly will be used to make interactive plots 
+        if True, plotly will be used to make interactive plots
+    return_fig: `bool`, optional (default: False)
+        if True, plotly object will be returned.
     Returns
     -------
     None
@@ -1386,8 +1388,11 @@ def plot_dimension_reduction(adata,n_components = None,comp1=0,comp2=1,comp3=2,c
                                                name='states',
                                                showlegend=True if is_string_dtype(df_plot[ann]) else False))
 
-                fig.update_layout(legend= {'itemsizing': 'constant'},width=500,height=500) 
-            fig.show(renderer="notebook")
+                fig.update_layout(legend= {'itemsizing': 'constant'},width=500,height=500)
+            if (return_fig):
+                return fig
+            else:
+                fig.show(renderer="notebook")
             
     else:
         if(len(color)<fig_ncol):
@@ -1520,7 +1525,7 @@ def plot_branches(adata,n_components = None,comp1=0,comp2=1,comp3=2,key_graph='e
                   pad=1.08,w_pad=None,h_pad=None,
                   show_text=False,
                   save_fig=False,fig_path=None,fig_name='branches.pdf',
-                  plotly=False):    
+                  plotly=False,return_fig=False):
     """Plot branches. The branches contain all the nodes learnt from ElPiGraph
     
     Parameters
@@ -1556,7 +1561,9 @@ def plot_branches(adata,n_components = None,comp1=0,comp2=1,comp3=2,key_graph='e
     fig_name: `str`, optional (default: 'branches.pdf')
         if save_fig is True, specify figure name.
     plotly: `bool`, optional (default: False)
-        if True, plotly will be used to make interactive plots       
+        if True, plotly will be used to make interactive plots
+    return_fig: `bool`, optional (default: False)
+        if True, plotly object will be returned.
 
     Returns
     -------
@@ -1635,7 +1642,10 @@ def plot_branches(adata,n_components = None,comp1=0,comp2=1,comp3=2,key_graph='e
                                            textposition="bottom center"),)
             fig.update_layout(legend= {'itemsizing': 'constant'},width=500,height=500, 
                               xaxis_title='Dim'+str(comp1+1),yaxis_title='Dim'+str(comp2+1))         
-        fig.show(renderer="notebook")
+        if(return_fig):
+            return fig
+        else:
+            fig.show(renderer="notebook")
             
     else:
         fig = plt.figure(figsize=(fig_size[0],fig_size[1]))
@@ -2456,7 +2466,7 @@ def plot_flat_tree(adata,color=None,dist_scale=1,
                    pad=1.08,w_pad=None,h_pad=None,
                    show_text=False,show_graph=False,
                    save_fig=False,fig_path=None,fig_name='flat_tree.pdf',
-                   plotly=False):  
+                   plotly=False,return_fig=False):
     """Plot flat tree based on a modified version of the force-directed layout Fruchterman-Reingold algorithm.
     Parameters
     ----------
@@ -2494,6 +2504,8 @@ def plot_flat_tree(adata,color=None,dist_scale=1,
         if save_fig is True, specify figure name.
     plotly: `bool`, optional (default: False)
         if True, plotly will be used to make interactive plots.
+    return_fig: `bool`, optional (default: False)
+        if True, plotly object will be returned.
 
     Returns
     -------
@@ -2571,8 +2583,12 @@ def plot_flat_tree(adata,color=None,dist_scale=1,
                                            textposition="bottom center",
                                            name='states'),)
 
-        fig.update_layout(legend= {'itemsizing': 'constant'},width=500,height=500) 
-        fig.show(renderer="notebook")
+        fig.update_layout(legend= {'itemsizing': 'constant'},width=500,height=500)
+        if(return_fig):
+            return fig
+        else:
+            fig.show(renderer="notebook")
+
     else:
         if(len(color)<fig_ncol):
             fig_ncol=len(color)
@@ -2636,7 +2652,7 @@ def plot_visualization_2D(adata,method='umap',n_neighbors=50, nb_pct=None,perple
                           vmin=None,vmax=None,alpha=0.8,
                           pad=1.08,w_pad=None,h_pad=None,
                           save_fig=False,fig_path=None,fig_name='visualization_2D.pdf',
-                          plotly=False):
+                          plotly=False,return_fig=False):
 
     """ Visualize the results in 2D plane
     
@@ -2682,6 +2698,8 @@ def plot_visualization_2D(adata,method='umap',n_neighbors=50, nb_pct=None,perple
         if save_fig is True, specify figure name.
     plotly: `bool`, optional (default: False)
         if True, plotly will be used to make interactive plots
+    return_fig: `bool`, optional (default: False)
+        if True, plotly object will be returned.
 
     Returns
     -------
@@ -2765,8 +2783,11 @@ def plot_visualization_2D(adata,method='umap',n_neighbors=50, nb_pct=None,perple
                                 opacity=alpha,width=500,height=500,
                                 color_continuous_scale=px.colors.sequential.Viridis,
                                 color_discrete_map=adata.uns[ann+'_color'] if ann+'_color' in adata.uns_keys() else {})
-            fig.update_layout(legend= {'itemsizing': 'constant'}) 
-            fig.show(renderer="notebook")
+            fig.update_layout(legend= {'itemsizing': 'constant'})
+            if (return_fig):
+                return fig
+            else:
+                fig.show(renderer="notebook")
     else:
         if(len(color)<fig_ncol):
             fig_ncol=len(color)
@@ -2821,7 +2842,7 @@ def plot_stream_sc(adata,root='S0',color=None,dist_scale=1,dist_pctl=95,preferen
                    pad=1.08,w_pad=None,h_pad=None,
                    show_text=True,show_graph=True,
                    save_fig=False,fig_path=None,fig_format='pdf',
-                   plotly=False): 
+                   plotly=False,return_fig=False):
     """Generate stream plot at single cell level (aka, subway map plots)
     
     Parameters
@@ -2867,6 +2888,8 @@ def plot_stream_sc(adata,root='S0',color=None,dist_scale=1,dist_pctl=95,preferen
         if save_fig is True, specify figure format.
     plotly: `bool`, optional (default: False)
         if True, plotly will be used to make interactive plots
+    return_fig: `bool`, optional (default: False)
+        if True, plotly object will be returned.
 
     Returns
     -------
@@ -2958,8 +2981,11 @@ def plot_stream_sc(adata,root='S0',color=None,dist_scale=1,dist_pctl=95,preferen
             fig.update_layout(legend= {'itemsizing': 'constant'},
                               xaxis={'showgrid': False,'zeroline': False,},
                               yaxis={'visible':False},
-                              width=800,height=500) 
-            fig.show(renderer="notebook")            
+                              width=800,height=500)
+            if (return_fig):
+                return fig
+            else:
+                fig.show(renderer="notebook")
     else:
         for i,ann in enumerate(color):
             fig = plt.figure(figsize=(fig_size[0],fig_size[1]))
@@ -3034,8 +3060,8 @@ def plot_stream(adata,root='S0',color = None,preference=None,dist_scale=0.9,
                 fig_size=(7,4.5),fig_legend_order=None,fig_legend_ncol=1,
                 vmin=None,vmax=None,
                 pad=1.08,w_pad=None,h_pad=None,
-                save_fig=False,fig_path=None,fig_format='pdf'):  
-    """Generate stream plot at density level
+                save_fig=False,fig_path=None,fig_format='pdf',return_fig=False):
+    """Generate stream plot at density level0-
     
     Parameters
     ----------
@@ -3083,6 +3109,8 @@ def plot_stream(adata,root='S0',color = None,preference=None,dist_scale=0.9,
         if save_fig is True, specify figure path. if None, adata.uns['workdir'] will be used.
     fig_format: `str`, optional (default: 'pdf')
         if save_fig is True, specify figure format.
+    return_fig: `bool`, optional (default: False)
+        if True, plotly object will be returned.
 
     Returns
     -------
